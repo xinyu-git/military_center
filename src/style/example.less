@@ -1,4 +1,8 @@
-.page-body{height: 100%;}
+page{
+    min-height: 100%;
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/bj.jpg) no-repeat center 500rpx;
+    background-size: 100% auto;
+}
 .swiper-container swiper{
   height: 500rpx;
 }
@@ -16,20 +20,33 @@
   overflow: hidden;
   font-size:26rpx;
   font-weight: bold;
+  color:#fff;
 }
 .nav_item{
   width: 25%;
   height: 100%;
   float: left;
   display: flex;
-  background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/image/navbg.png)       no-repeat center;
+  background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/navbg.png) no-repeat center;
   background-size: 100% 100%;
+  justify-content: center;
+  align-items: center;
 }
+.nav_item text{display: inline-block;vertical-align: middle;}
 .nav_itemActive{
-  background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/image/navbg1.png)       no-repeat center;
+  background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/navbg1.png) no-repeat center;
   background-size: 100% 100%;
 }
 .nav_item image{
   width: 44rpx;
   height: 50rpx;
+  vertical-align: middle;
+}
+.pageBox{
+    width: 100%;
+    height: auto;
+}
+.accordion{
+    width:700rpx;
+    margin:0 auto;
 }
