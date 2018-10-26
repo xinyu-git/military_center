@@ -9,6 +9,33 @@
                         <view class="listBtn listBtn1">
                             <text>特惠福利 消费金币送银币</text>
                         </view>
+                        <view class="listCon">
+                            <text>活动时间：10月25日00:00至10月29日24:00</text>
+                            <text>活动时间：10月25日00:00至10月29日24:00</text>
+                            <text>活动时间：10月25日00:00至10月29日24:00</text>
+                            <text>活动时间：10月25日00:00至10月29日24:00</text>
+                            <text>活动时间：10月25日00:00至10月29日24:00</text>
+                            <text>活动时间：10月25日00:00至10月29日24:00</text>
+                            <text>活动时间：10月25日00:00至10月29日24:00</text>
+                            <text>活动时间：10月25日00:00至10月29日24:00</text>
+                        </view>
+                    </view>
+                    <view class="listEvent">
+                        <view class="listBtn listBtn2">
+                            <text>特惠福利 75折起热卖VIP买1送1</text>
+                        </view>
+                        <view class="listCon"></view>
+                    </view>
+                    <view class="listEvent">
+                        <view class="listBtn listBtn3">
+                            <text>阿拉曼战役 经验大丰收</text>
+                        </view>
+                        <view class="listCon"></view>
+                    </view>
+                    <view class="listEvent">
+                        <view class="listBtn listBtn4">
+                            <text>首充返金100% 另送高级账号+500000银币+战场神器</text>
+                        </view>
                         <view class="listCon"></view>
                     </view>
                 </view>
