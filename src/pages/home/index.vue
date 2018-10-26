@@ -1,7 +1,29 @@
 <template>
-  <view class="page">
-    
-  </view>
+    <view class="container">
+        <view class="page-body">
+            <!-- 轮播图 -->
+            <view class="swiper-container">  
+                <swiper indicator-dots="{{indicatorDots}}"
+                  autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+                    <block wx:for="{{imgUrls}}" wx:key="index">
+                        <swiper-item>
+                            <image src="{{item}}" class="slide-image" />
+                        </swiper-item>
+                    </block>
+                </swiper>   
+            </view>
+        </view>
+        <view class="nav_box">
+          <block wx:for="{{navList}}" wx:key="index">
+            <view class="nav_item " >
+              <navigator url="{{item.url}}">
+                <image src='../../image/ico.png'></image>
+                <text>{{item.text}}</text>
+              </navigator>
+            </view>
+          </block>
+        </view> 
+    </view>
 </template>
 <script>
     import wepy from 'wepy';
@@ -23,34 +45,33 @@
         };
         //可用于页面模板绑定的数据
         data = {
-          items:[
-              {
-                  url:'/pages/dataUpload/dataUpload',
-                  icon:'icon-dataUpload',
-                  text:'娃娃机抄码表',
-                  codeType:1
-              },{
-                  url:'/pages/replenishment/index',
-                  icon:'icon-replenishment',
-                  text:'娃娃机补货',
-                  codeType:1
-              },{
-                  url:'/pages/stock/stockList',
-                  icon:'icon-stock',
-                  text:'库存管理',
-                  codeType:2
-              },{
-                  url:'/pages/dollEditor/index?stocktype=1',
-                  icon:'icon-pickUpGoods',
-                  text:'提货',
-                  codeType:2
-              },{
-                  url:'/pages/dollEditor/index?stocktype=3',
-                  icon:'icon-returnGoods',
-                  text:'退货',
-                  codeType:2
-              }
-          ]
+          imgUrls: [
+                'https://raw.githubusercontent.com/xinyu-git/military_center/master/image/focus1.jpg',
+                'https://raw.githubusercontent.com/xinyu-git/military_center/master/image/focus2.jpg',
+                'https://raw.githubusercontent.com/xinyu-git/military_center/master/image/focus1.jpg',
+            ],
+            indicatorDots: false,
+            autoplay:true,
+            interval:3000,
+            duration:500,
+            navList:[
+                {
+                  url:'index',
+                  text: '首页'
+                },
+                {
+                  url:'pages/center/center',
+                  text:'个人中心'
+                },
+                {
+                  url:'pages/exchange/exchange',
+                  text: '兑换'
+                },
+                {
+                  url:'pages/activity/activity',
+                  text: '往期活动'
+                }
+            ]
         };
         //事件处理函数(集中保存在methods对象中)
         methods = {
