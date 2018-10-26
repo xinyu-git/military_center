@@ -1,0 +1,11 @@
+.DS_Store
+.svn/*
+.DS_Store/*
+.wepycache/*
+.wepycache
+.idea/*
+*dist/
+logs
+npm-debug.log
+package-lock.json
+node_modules
