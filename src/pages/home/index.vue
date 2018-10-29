@@ -10,14 +10,16 @@
                             <view class="listBtn {{item.itemClass}} {{ listCurrIndex == index ? 'listBtnCurr' : ''}}" data-changeid="{{item.id}}" @tap="showHide" data-index="{{index}}">
                                 <text>{{item.listTitle}}</text>
                             </view>
-                            <view class="listCon" wx:if="{{item.shows}}">
-                                <text> {{item.contents}} </text>
+                            <view class="listCon " hidden="{{!item.shows}}" >
+                                <text> {{ item.contents}} </text>
                             </view>
                         </view>
                     </block>
                 </view>
             </view>
         </view>
+        <!-- 悬浮 -->
+        <view class="btn-suspend">e</view>
         <!-- 底部导航 -->
         <tabBar></tabBar>
     </view>
@@ -39,7 +41,7 @@
         async onShow(){
             
         };
-        //页面的生命周期函数
+        //页面的生命周期函数 wx:if="{{item.shows}}"
         async onLoad() {
             let result = await super.onLoad();
             if (!result) {
@@ -60,7 +62,7 @@
                     id:'02',
                     itemClass:'listBtn2',
                     listTitle:'特惠福利 75折起热卖VIP买1送1',
-                    contents:'活动时间：10月25日00:00至10月29日24:00',
+                    contents:'活动时间：10月25日00:00至10月29日24:00活动时间：10月25日00:00至10月29日24:00活动时间：10月25日00:00至10月29日24:00活动时间：10月25日00:00至10月29日24:00',
                     shows:false
                 },
                 {
