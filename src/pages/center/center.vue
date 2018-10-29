@@ -9,6 +9,33 @@
                     <view class="info-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" @tap="tabNav">个人信息</view>
                     <view class="info-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" @tap="tabNav">领奖记录</view>
                 </view>
+                <view class="info-content" >
+                    <!-- 个人信息 -->
+                    <view class="info-item {{currentTab==0 ? 'show' : ''}}" >
+                        <view class="info-box">
+                            <view class="info-line">
+                                <label>昵称：</label>
+                                <text>handry</text>
+                            </view>
+                            <view class="info-line">
+                                <label>大区：</label>
+                                <text>联通北方区</text>
+                            </view>
+                            <view class="info-line">
+                                <label>现有军功：</label>
+                                <text>4870</text>
+                            </view>
+                            <view class="info-line">
+                                <label>总共获得军功：</label>
+                                <text>48700</text>
+                            </view>
+                        </view>
+                    </view>
+                    <!-- 领奖记录 -->
+                    <view class="info-item {{currentTab==1 ? 'show' : ''}}">
+                        e1
+                    </view>
+                </view>
             </view>
         </view>
         <!-- 底部导航 -->
@@ -68,7 +95,8 @@
                     shows:false
                 }
             ],
-            listCurrIndex:0
+            listCurrIndex:0,
+            currentTab:0
         };
         //事件处理函数(集中保存在methods对象中)
         methods = {
@@ -88,6 +116,11 @@
                         that.listContent[i].shows = false;
                     }
                 }
+            },
+            tabNav(e){
+                let that=this;
+                let itemIndex=e.currentTarget.dataset.current;//操作元素绑定的index 
+                that.currentTab=itemIndex;
             }
         };
         async onShow(){
