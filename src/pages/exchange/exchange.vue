@@ -59,7 +59,7 @@
     import auth from "../base/auth";
     import Swiper from "../../components/swiper";
     import tabBar from "../../components/tabBar";
-    export default class Center extends auth {
+    export default class Index extends auth {
         config = {
             navigationBarTitleText: "军功中心"
         };
