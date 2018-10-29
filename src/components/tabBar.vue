@@ -14,7 +14,7 @@
 <script>
     import wepy from "wepy";
     export default class Swiper extends wepy.component{
-    data = {
+      data = {
         navList:[
             {
               pagePath:'index',
@@ -34,7 +34,14 @@
             }
         ],
         navActiveIndex:0
-    }
+      };
+      methods = {
+        navJump(e){
+          let that=this;
+          let itemIndex=e.currentTarget.dataset.index;//操作元素绑定的index
+          that.navActiveIndex=itemIndex;
+        }
+      }
 }
 </script>
 
