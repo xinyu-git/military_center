@@ -4,11 +4,6 @@
             <!-- 轮播图 -->
             <swiper></swiper>
             <view class="pageBox">
-                <!-- 个人信息/领奖记录 -->
-                <view class="info-tab">
-                    <view class="info-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" @tap="tabNav">个人信息</view>
-                    <view class="info-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" @tap="tabNav">领奖记录</view>
-                </view>
                 <view class="info-content" >
                     <!-- 个人信息 -->
                     <view class="info-item {{currentTab==0 ? 'show' : ''}}" >
@@ -31,21 +26,6 @@
                             </view>
                         </view>
                     </view>
-                    <!-- 领奖记录 -->
-                    <view class="info-item {{currentTab==1 ? 'show' : ''}}">
-                        <view class="rewardTable">
-                            <view class="tr tableTit">
-                                <view class="th th1">活动名称</view>
-                                <view class="th th2">活动奖励</view>
-                                <view class="th th3">领取状态</view>
-                            </view>
-                            <view class="tr" wx:for="{{tableInfo}}" wx:key="index">
-                                <view class="td td1">{{item.actName}}</view>
-                                <view class="td td2">{{item.actReward}}</view>
-                                <view class="td td3">{{item.getStatus}}</view>
-                            </view>
-                        </view>
-                    </view>
                 </view>
             </view>
         </view>
@@ -59,7 +39,7 @@
     import auth from "../base/auth";
     import Swiper from "../../components/swiper";
     import tabBar from "../../components/tabBar";
-    export default class Index extends auth {
+    export default class Exchange extends auth {
         config = {
             navigationBarTitleText: "军功中心"
         };
