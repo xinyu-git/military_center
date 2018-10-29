@@ -4,23 +4,13 @@
             <!-- 轮播图 -->
             <swiper></swiper>
             <view class="pageBox">
-                <!-- 手风琴 -->
-                <view class="accordion">
-                    <block wx:for="{{listContent}}" wx:key="index">
-                        <view class="listEvent" >
-                            <view class="listBtn {{item.itemClass}} {{ listCurrIndex == index ? 'listBtnCurr' : ''}}" data-changeid="{{item.id}}" @tap="showHide" data-index="{{index}}">
-                                <text>{{item.listTitle}}</text>
-                            </view>
-                            <view class="listCon " hidden="{{!item.shows}}">
-                                <text> {{ item.contents}} </text>
-                            </view>
-                        </view>
-                    </block>
+                <!-- 个人信息/领奖记录 -->
+                <view class="info-tab">
+                    <view class="info-tab-list {{currentTab==0 ? 'on' : ''}}" data-current="0" @tap="tabNav">个人信息</view>
+                    <view class="info-tab-list {{currentTab==1 ? 'on' : ''}}" data-current="1" @tap="tabNav">领奖记录</view>
                 </view>
             </view>
         </view>
-        <!-- 悬浮 -->
-        <view class="btn-suspend"></view>
         <!-- 底部导航 -->
         <tabBar></tabBar>
     </view>
@@ -44,10 +34,7 @@
         };
         //页面的生命周期函数 
         async onLoad() {
-            let result = await super.onLoad();
-            if (!result) {
-              return;
-            }
+            
         };
         //可用于页面模板绑定的数据
         data = {

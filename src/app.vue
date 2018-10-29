@@ -15,7 +15,9 @@ const EventBus = require("./util/eventbus");
 export default class extends wepy.app {
   config = {
     pages: [
+      "pages/center/center",
       "pages/home/index",
+      
       "pages/auth/refreToken",
       "pages/auth/signup",
       "pages/auth/login"
