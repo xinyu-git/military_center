@@ -4,33 +4,37 @@
             <!-- 轮播图 -->
             <swiper></swiper>
             <view class="pageBox">
-                <view class="info-content" >
-                    <!-- 个人信息 -->
-                    <view class="info-item {{currentTab==0 ? 'show' : ''}}" >
-                        <view class="info-box">
-                            <view class="info-line">
-                                <label>昵称：</label>
-                                <text>handry</text>
+                <view class="exchangeBox">
+                    <view class="userCount">个人军功：0</view>
+                    <view class="exTitle">军武良品</view>
+                    <view class="exchangeList">
+                        <block wx:for="{{exchangeList}}" wx:key="index">
+                            <view class="exchangeItem">
+                                <view class="rewardBox">
+                                    <image src="{{item.src}}" />
+                                    <text>{{item.name}}</text>
+                                </view>
+                                <button class="btn-exchange">{{item.number}}</button>
                             </view>
-                            <view class="info-line">
-                                <label>大区：</label>
-                                <text>联通北方区</text>
+                        </block>
+                    </view>
+                    <view class="exTitle">永久坦克</view>
+                    <view class="exchangeList">
+                        <block wx:for="{{exchangeList}}" wx:key="index">
+                            <view class="exchangeItem">
+                                <view class="rewardBox">
+                                    <image src="{{item.src}}" />
+                                    <text>{{item.name}}</text>
+                                </view>
+                                <button class="btn-exchange">{{item.number}}</button>
                             </view>
-                            <view class="info-line">
-                                <label>现有军功：</label>
-                                <text>4870</text>
-                            </view>
-                            <view class="info-line">
-                                <label>总共获得军功：</label>
-                                <text>48700</text>
-                            </view>
-                        </view>
+                        </block>
                     </view>
                 </view>
             </view>
         </view>
         <!-- 底部导航 -->
-        <tabBar></tabBar>
+        <tabBar :tabBar.sync="tabBarData"></tabBar>
     </view>
 </template>
 <script>
@@ -52,91 +56,114 @@
         };
         //页面的生命周期函数 
         async onLoad() {
-            
+            let that=this;
+            that.tabBarData = that.$parent.tabBarClickHandle(2, this);
+            that.$apply();
         };
         //可用于页面模板绑定的数据
         data = {
-            listContent:[
+            tabBarData:{},
+            exchangeList:[
                 {
-                    id:'01',
-                    itemClass:'listBtn1',
-                    listTitle:'特惠福利 消费金币送银币',
-                    contents:'活动时间：10月25日00:00至10月29日24:00',
-                    shows:true
+                    src:'../../images/r1.png',
+                    name:'C系定制中坦59式手表',
+                    number:'15888军功'
                 },
                 {
-                    id:'02',
-                    itemClass:'listBtn2',
-                    listTitle:'特惠福利 75折起热卖VIP买1送1',
-                    contents:'活动时间：10月25日00:00至10月29日24:00活动时间：10月25日00:00至10月29日24:00活动时间：10月25日00:00至10月29日24:00活动时间：10月25日00:00至10月29日24:00',
-                    shows:false
+                    src:'../../images/r1.png',
+                    name:'坦克世界1:72 百运模型',
+                    number:'15588军功'
                 },
                 {
-                    id:'03',
-                    itemClass:'listBtn3',
-                    listTitle:'阿拉曼战役 经验大丰收',
-                    contents:'活动时间：10月25日00:00至10月29日24:00',
-                    shows:false
+                    src:'../../images/r1.png',
+                    name:'哈罗恩棉油打火机',
+                    number:'15888军功'
                 },
                 {
-                    id:'04',
-                    itemClass:'listBtn4',
-                    listTitle:'首充返金100% 另送高级账号+500000银币+战场神器',
-                    contents:'活动时间：10月25日00:00至10月29日24:00',
-                    shows:false
-                }
-            ],
-            listCurrIndex:0,
-            currentTab:0,
-            tableInfo:[
-                {
-                    actName:'辉煌的征程',
-                    actReward:'银币 5000',
-                    getStatus:'未领取'
+                    src:'../../images/r1.png',
+                    name:'C系定制中坦59式手表',
+                    number:'15848军功'
                 },
                 {
-                    actName:'辉煌的征程1',
-                    actReward:'银币 4000',
-                    getStatus:'未领取'
+                    src:'../../images/r1.png',
+                    name:'坦克世界1:72 百运模型',
+                    number:'15888军功'
                 },
                 {
-                    actName:'辉煌的征程2',
-                    actReward:'银币 5000',
-                    getStatus:'未领取'
+                    src:'../../images/r1.png',
+                    name:'哈罗恩棉油打火机',
+                    number:'15488军功'
                 }
             ]
         };
         //事件处理函数(集中保存在methods对象中)
         methods = {
-            showHide(e){
-                let that = this;
-                let contentFor = that.listContent;      
-                let itemIndex=e.currentTarget.dataset.index;//操作元素绑定的index  
-                for(let i=0;i<contentFor.length;i++){
-                    if(e.currentTarget.dataset.changeid == contentFor[i].id){
-                        if(that.listContent[i].shows){
-                            that.listContent[i].shows = false;
-                        }else{
-                            that.listContent[i].shows = true;
-                            that.listCurrIndex=itemIndex;   
-                        }
-                    }else{
-                        that.listContent[i].shows = false;
-                    }
-                }
-            },
-            tabNav(e){
-                let that=this;
-                let itemIndex=e.currentTarget.dataset.current;//操作元素绑定的index 
-                that.currentTab=itemIndex;
-            }
+            
         };
         async onShow(){
-            let that=this;
+            
         };
         
     }
 </script>
 <style >
-  
+.exchangeBox{
+    font-size:24rpx;
+}
+.userCount{
+    color:#ffc948;
+    line-height: 68rpx;
+    text-align: center;
+    margin-bottom: 10rpx;
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/exV.png) no-repeat center 0;
+    background-size:auto 100%;
+}
+.exTitle{
+    text-align: center;
+    line-height: 40rpx;
+    color: #e06d30;
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/h4.png) no-repeat center 0;
+    background-size:auto 100%;
+    margin-bottom: 10rpx;
+}
+.exchangeList{
+    text-align: center;
+    margin-bottom: 30rpx;
+}
+.exchangeItem{
+    display: inline-block;
+    margin:10rpx 10rpx;
+}
+.rewardBox{
+    width:220rpx;
+    height: 220rpx;
+    margin-bottom:10rpx;
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/jlbg.png) no-repeat center top;
+    background-size:100% 100%;
+    position: relative;
+}
+.rewardBox image{
+    display: block;
+    width:100%;
+    height: 125rpx;
+    padding-top:15rpx;
+}
+.rewardBox text{
+    font-size:24rpx;
+    color:#fff4f4;
+    background: #7f0e09;
+    padding:5rpx 10rpx;
+    line-height: 30rpx;
+    position: absolute;
+    left:0;
+    bottom:0;
+}
+.btn-exchange{
+    width:200rpx;
+    font-size:22rpx;
+    color:#352000;
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/jlbg1.png) repeat-x center top;
+    background-size:10rpx 40rpx;
+    line-height: 40rpx;
+}
 </style>

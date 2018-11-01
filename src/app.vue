@@ -15,10 +15,10 @@ const EventBus = require("./util/eventbus");
 export default class extends wepy.app {
   config = {
     pages: [
+      "pages/home/index",
+      "pages/activity/activity",
       "pages/exchange/exchange",
       "pages/center/center",
-      "pages/home/index",
-      
       "pages/auth/refreToken",
       "pages/auth/signup",
       "pages/auth/login"
@@ -334,6 +334,18 @@ export default class extends wepy.app {
     // console.log("this is app on hide");
   }
   
+  tabBarClickHandle(id,that){
+    let tbList = this.globalData.tabBar.list;
+    tbList.forEach((item,index) => {
+      if(id==index){
+        tbList[id].selected = true;
+      }else{
+        tbList[index].selected = false;
+      }
+    })
+    that.$apply();
+    return this.globalData.tabBar;
+  }
 
   globalData = {
     sleep: this.sleep,
@@ -356,11 +368,30 @@ export default class extends wepy.app {
     loginInfo: {},
     chatmsg: [],
     EventBus: EventBus,
-    macheid: null,
-    machename:null,
-    type:'queryall',
-    operator:null,
-    dollEditorArr:[],
+    tabBar:{
+      list:[
+        {
+          pagePath:'../home/index',
+          text: '首页',
+          tabIndex: 0
+        },
+        {
+          pagePath:'../center/center',
+          text:'个人中心',
+          tabIndex: 1
+        },
+        {
+          pagePath:'../exchange/exchange',
+          text: '兑换',
+          tabIndex: 2
+        },
+        {
+          pagePath:'../activity/activity',
+          text: '往期活动',
+          tabIndex: 3
+        }
+      ]
+    }
   };
 }
 </script>

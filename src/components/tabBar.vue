@@ -1,12 +1,12 @@
 <template>
     <view class="nav_box">
-        <block wx:for="{{navList}}" wx:key="index">
-            <view class="nav_item {{navActiveIndex==index ? 'nav_itemActive' : ''}}" @tap="navJump" data-index="{{index}}">
-              <navigator url="{{item.pagePath}}">
-                <image src='../../images/ico.png' />
-                <text>{{item.text}}</text>
-              </navigator>
-            </view>
+        <block wx:for="{{tabBar.list}}" wx:key="index">
+          <navigator url="{{item.pagePath}}" open-type="redirect" hover-class="none">
+              <view class="nav_item {{ item.selected  ? 'nav_itemActive' : ''}}" data-index="{{index}}">
+                  <image src='../../images/ico.png' />
+                  <text>{{item.text}}</text>
+              </view>
+            </navigator>
         </block>
     </view> 
 </template>
@@ -14,33 +14,20 @@
 <script>
     import wepy from "wepy";
     export default class Swiper extends wepy.component{
-      data = {
-        navList:[
-            {
-              pagePath:'index',
-              text: '首页'
-            },
-            {
-              pagePath:'pages/center/center',
-              text:'个人中心'
-            },
-            {
-              pagePath:'pages/exchange/exchange',
-              text: '兑换'
-            },
-            {
-              pagePath:'pages/activity/activity',
-              text: '往期活动'
-            }
-        ],
-        navActiveIndex:0
-      };
-      methods = {
-        navJump(e){
-          let that=this;
-          let itemIndex=e.currentTarget.dataset.index;//操作元素绑定的index
-          that.navActiveIndex=itemIndex;
+      props = {
+        tabBar : {
+          type:Object,
+          default:{}
         }
+      }
+      data = {
+        
+      };
+      async onLoad(){
+        
+      }
+      methods = {
+        
       }
 }
 </script>

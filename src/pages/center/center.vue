@@ -45,12 +45,18 @@
                                 <view class="td td3">{{item.getStatus}}</view>
                             </view>
                         </view>
+                        <!-- 分页 -->
+                        <view class="page">
+                            <text>1/1</text>
+                            <button class="page-btn prev">上一页</button>
+                            <button class="page-btn nextPage">下一页</button>
+                        </view>
                     </view>
                 </view>
             </view>
         </view>
         <!-- 底部导航 -->
-        <tabBar></tabBar>
+        <tabBar :tabBar.sync="tabBarData"></tabBar>
     </view>
 </template>
 <script>
@@ -72,10 +78,13 @@
         };
         //页面的生命周期函数 
         async onLoad() {
-            
+            let that=this;
+            that.tabBarData = that.$parent.tabBarClickHandle(1, this);
+            that.$apply();
         };
         //可用于页面模板绑定的数据
         data = {
+            tabBarData:{},
             listContent:[
                 {
                     id:'01',

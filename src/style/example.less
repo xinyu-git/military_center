@@ -28,7 +28,7 @@ page{
 }
 .nav_item{
   width: 25%;
-  height: 100%;
+  height: 103rpx;
   float: left;
   display: flex;
   background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/navbg.png) no-repeat center;
@@ -201,4 +201,136 @@ page{
 }
 .th2,.td2{
     width:40%;
+}
+.page{
+    text-align: center;
+    font-size:24rpx;
+    color:#ccc;
+}
+.page text,.page button{
+    display: inline-block;
+    vertical-align: middle;
+    margin:0 10rpx;
+}
+.page .page-btn{
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/jlbg1.png) repeat-x center top;
+    background-size:10rpx 40rpx;
+    line-height: 40rpx;
+    color:#352000;
+    font-size:22rpx;
+}
+.modal-mask {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: #000;
+    opacity: 0.5;
+    overflow: hidden;
+    z-index: 9000;
+    color: #fff;
+  }
+.modal-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform:translate(-50%,-50%);
+  z-index: 9999;
+  background: #0e0e0e;
+  border:1px solid #6e6e6e;
+  font-size:30rpx;
+  color:#f4f4f4;
+}
+.login-container{
+  width:500rpx;
+  padding:50rpx;
+  overflow: hidden;
+}
+.login-item,.login-item label,.login-item input{
+    float:left;
+}
+.login-item {
+    margin-bottom:20rpx;
+}
+.login-item label{
+    color:#ffbb2a;
+    font-size:28rpx;
+    width:115rpx;
+    margin-top:10rpx;
+    text-align: right;
+}
+.login-item input{
+    width:360rpx;
+    height:60rpx;
+    background: #1c1c1c;
+    border:1px solid #595959;
+    font-size:26rpx;
+    color:#c6c6c6;
+    padding:0 10rpx;
+}
+.login-item input.verifyImg-input{
+    width:220rpx;
+    margin-right: 20rpx;
+}
+.verifyImg{
+    width:118rpx;
+    height:60rpx;
+    border:1px solid #595959;
+}
+.select_box{
+    width:380rpx;
+    height: 60rpx;
+    background: #1c1c1c;
+    border:1px solid #595959;
+    float: left;
+    position: relative;
+    z-index:3;
+}
+.select{
+    width:100%;
+    position: absolute;
+    left:0;
+    top:0;
+    height: 100%;
+}
+.select_text{
+    display: block;
+    height: 100%;
+    padding-left: 10rpx;
+    line-height: 60rpx;
+}
+.select_img{
+    width: 60rpx;
+    height: 60rpx;
+    position: absolute;
+    right: 0;
+    top:0;
+}
+.option_box{
+    width:380rpx;
+    position: absolute;
+    left: -1rpx;
+    top:61rpx;
+    background: #1c1c1c;
+    border:1px solid #595959; 
+}
+.option_box text{
+    display: block;
+    padding:0 10rpx;
+    line-height: 60rpx;
+}
+.selectedV{
+    background: #6c6c6d;
+}
+.btn-login{
+    width:236rpx;
+    height: 76rpx;
+    font-size: 30rpx;
+    color:#f8f8f8;
+    text-align: center;
+    line-height: 76rpx;
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/tabbg1.png) no-repeat center top;
+    background-size:100% 100%;
+    margin-top: 40rpx;
 }

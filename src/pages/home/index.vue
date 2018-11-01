@@ -21,8 +21,43 @@
         </view>
         <!-- 悬浮 -->
         <view class="btn-suspend"></view>
+        <!-- 登录弹窗 -->
+        <view class="modal-content">
+            <view class="modal-mask"></view>
+            <view class="modal-dialog">
+                <view class="login-container">
+                    <view class="login-item">
+                        <label>昵称：</label>
+                        <input type="text" />
+                    </view>
+                    <view class="login-item">
+                        <label>密码：</label>
+                        <input password type="text" />
+                    </view>
+                    <view class="login-item">
+                        <label>大区：</label>
+                        <view class="select_box">
+                            <view class="select" @tap="selectTap">
+                                <text class="select_text">{{selectData[selectIndex].text}}</text>
+                                <image class='select_img' src='../../images/sel.jpg' />  
+                            </view>
+                            <view class="option_box" wx:if="{{selectShow}}">
+                                <text class='option' wx:for='{{selectData}}' wx:key='this' data-index='{{index}}' catchtap='optionTap'>{{item.text}}</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="login-item">
+                        <label>验证码：</label>
+                        <input class="verifyImg-input" />
+                        <image class="verifyImg" />
+                    </view>
+                    <button class="btn-login">登录</button>
+                </view>
+            </view>
+            <view class="modal-btn"><button class="btn-close"></button></view>
+        </view>
         <!-- 底部导航 -->
-        <tabBar></tabBar>
+        <tabBar :tabBar.sync="tabBarData"></tabBar>
     </view>
 </template>
 <script>
@@ -33,7 +68,7 @@
     import tabBar from "../../components/tabBar";
     export default class Index extends auth {
         config = {
-            navigationBarTitleText: "军功中心"
+            navigationBarTitleText: "首页"
         };
         components = {
             swiper: Swiper,
@@ -44,13 +79,19 @@
         };
         //页面的生命周期函数 
         async onLoad() {
+            let that=this;
+            that.tabBarData = that.$parent.tabBarClickHandle(0, this);
+            that.$apply();
             let result = await super.onLoad();
             if (!result) {
               return;
             }
+            //this.tabBarData=this.$parent.globalData.tabBar
+            
         };
         //可用于页面模板绑定的数据
         data = {
+            tabBarData:{},
             listContent:[
                 {
                     id:'01',
@@ -58,6 +99,7 @@
                     listTitle:'特惠福利 消费金币送银币',
                     contents:'活动时间：10月25日00:00至10月29日24:00',
                     shows:true
+            
                 },
                 {
                     id:'02',
@@ -81,7 +123,21 @@
                     shows:false
                 }
             ],
-            listCurrIndex:0
+            listCurrIndex:0,
+            selectShow:false,  //控制下拉列表的显示隐藏
+            selectData:[
+                {
+                    value:'',
+                    text:'请选择大区'
+                },{
+                    value:'150000',
+                    text:'电信南方区'
+                },{
+                    value:'150001',
+                    text:'联通北方区'
+                }
+            ],  //下拉列表的数据
+            selectIndex:0, //选择的下拉列表下标
         };
         //事件处理函数(集中保存在methods对象中)
         methods = {
@@ -101,7 +157,11 @@
                         that.listContent[i].shows = false;
                     }
                 }
-            }
+            },
+            selectTap(){
+                this.selectShow=!this.selectShow;
+                console.log(this.selectData.length)
+            },
         };
         async onShow(){
             let that=this;
