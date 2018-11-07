@@ -333,7 +333,7 @@ export default class extends wepy.app {
   onHide() {
     // console.log("this is app on hide");
   }
-  
+  //手风琴
   tabBarClickHandle(id,that){
     let tbList = this.globalData.tabBar.list;
     tbList.forEach((item,index) => {
@@ -366,9 +366,8 @@ export default class extends wepy.app {
     io: null,
     socket1: null,
     loginInfo: {},
-    chatmsg: [],
     EventBus: EventBus,
-    tabBar:{
+    tabBar:{  //底部导航
       list:[
         {
           pagePath:'../home/index',
@@ -391,7 +390,8 @@ export default class extends wepy.app {
           tabIndex: 3
         }
       ]
-    }
+    },
+    loginState:0   //登录状态
   };
 }
 </script>

@@ -83,6 +83,14 @@ page{
     background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/a_04.png) no-repeat center;
     background-size:100% 100%;
 }
+.listBtn5{
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/a_05.png) no-repeat center;
+    background-size:100% 100%;
+}
+.listBtn6{
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/a_06.png) no-repeat center;
+    background-size:100% 100%;
+}
 .listBtn1.listBtnCurr{
     background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/a_01curr.png) no-repeat center;
     background-size:100% 100%;
@@ -99,11 +107,21 @@ page{
     background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/a_04curr.png) no-repeat center;
     background-size:100% 100%;
 }
+.listBtn5.listBtnCurr{
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/a_05curr.png) no-repeat center;
+    background-size:100% 100%;
+}
+.listBtn6.listBtnCurr{
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/a_06curr.png) no-repeat center;
+    background-size:100% 100%;
+}
 .listCon{
-    padding:40rpx 80rpx;
+    padding:40rpx 40rpx;
     background: #171616;
     margin:5rpx 0;
     font-size:26rpx;
+    height:300rpx;
+    overflow: auto;
 }
 .btn-suspend{
     width:100rpx;
@@ -241,10 +259,11 @@ page{
   border:1px solid #6e6e6e;
   font-size:30rpx;
   color:#f4f4f4;
+  width:600rpx;
+  padding:70rpx 50rpx 50rpx;
 }
-.login-container{
-  width:500rpx;
-  padding:50rpx;
+.clearfloat:after {visibility:hidden;display:block;font-size:0;content:"";clear:both;height:0;}
+.userInfo-container{
   overflow: hidden;
 }
 .login-item,.login-item label,.login-item input{
@@ -323,6 +342,11 @@ page{
 .selectedV{
     background: #6c6c6d;
 }
+.loginTs{
+    text-align: center;
+    color:#ee0a3b;
+    width:100%;
+}
 .btn-login{
     width:236rpx;
     height: 76rpx;
@@ -330,7 +354,42 @@ page{
     color:#f8f8f8;
     text-align: center;
     line-height: 76rpx;
-    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/tabbg1.png) no-repeat center top;
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/loginbg.png) no-repeat center top;
     background-size:100% 100%;
-    margin-top: 40rpx;
+    margin-top: 20rpx;
+}
+.modal-btn{
+    width: 56rpx;
+    height: 56rpx;
+    position: absolute;
+    right:10rpx;
+    top: 5rpx;
+}
+.btn-close{
+    width:100%;
+    height: 100%;
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/close.png) no-repeat center top;
+    background-size:100% 100%;
+}
+.modal-Info{
+    text-align: center;
+}
+.warm-tips{
+    margin-bottom: 20rpx;
+}
+.warm-tips text{
+    display: block;
+}
+.userInfo-container .login-item {
+    margin-bottom: 10rpx;
+}
+.userInfo-container .login-item label{
+    width: 150rpx;
+}
+.userInfo-container .login-item text{
+    line-height: 60rpx;
+}
+.userInfo-item .option_box{
+    top:auto;
+    bottom:61rpx;
 }

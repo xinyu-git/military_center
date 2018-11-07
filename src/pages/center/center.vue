@@ -57,6 +57,16 @@
         </view>
         <!-- 底部导航 -->
         <tabBar :tabBar.sync="tabBarData"></tabBar>
+        <!-- 登录弹窗 -->
+        <view class="modal-content" style="display:none;">
+            <view class="modal-mask"></view>
+            <view class="modal-dialog">
+                <view class="modal-btn"><button class="btn-close"></button></view>
+                <view class="modal-Info" >
+                    <text>恭喜您获得</text>
+                </view>
+            </view>
+        </view>
     </view>
 </template>
 <script>
