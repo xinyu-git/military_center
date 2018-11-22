@@ -8,15 +8,16 @@
 <script>
 import wepy from "wepy";
 import "wepy-async-function";
-import { api, server } from "./config/api";
+import { api, server , apiM } from "./config/api";
 import { socketinit } from "./socket/ioevent";
 const EventBus = require("./util/eventbus");
 
 export default class extends wepy.app {
   config = {
     pages: [
-      "pages/home/index",
       "pages/activity/activity",
+      "pages/home/index",
+      "pages/activity/activityCon",
       "pages/exchange/exchange",
       "pages/center/center",
       "pages/auth/refreToken",
@@ -44,14 +45,13 @@ export default class extends wepy.app {
     let that = this;
     return function(url, data = {}, header = {}) {
       return new Promise(function(resolve, reject) {
-        if (!that.globalData.token) {
-          return reject("token is null");
-        }
+        // if (!that.globalData.token) {
+        //   return reject("token is null");
+        // }
         let defaultheader = {
           "Content-Type": "application/json",
           Authorization: `Bearer ${that.globalData.token}`,
-          Sourceorigin: "app",
-          uid:wx.getStorageSync("user:detail").id
+          Sourceorigin: "app"
         };
         for (let key in header) {
           defaultheader[key] = header[key];
@@ -175,19 +175,19 @@ export default class extends wepy.app {
       self.globalData.scene = options.scene; //huan
     }
     await self.initToken();
-    if (!!options.shareTicket) {
-      //发请求前先拿合法token
-      self.globalData.shareTicket = options.shareTicket;
-      // await sself.globalData.get(``)//发请求，告诉后端有ticket
-    }
-    wx.showLoading({ title: "加载中", mask: true });
-    let userinfo = (self.globalData.userInfo =
-      self.globalData.userInfo || wx.getStorageSync("user:detail"));
-    if (!userinfo) {
-      await self.refreshUserInfo();
-    }
-    await self._afterLaunch();
-    wx.hideLoading();
+    // if (!!options.shareTicket) {
+    //   //发请求前先拿合法token
+    //   self.globalData.shareTicket = options.shareTicket;
+    //   // await sself.globalData.get(``)//发请求，告诉后端有ticket
+    // }
+    // wx.showLoading({ title: "加载中", mask: true });
+    // let userinfo = (self.globalData.userInfo =
+    //   self.globalData.userInfo || wx.getStorageSync("user:detail"));
+    // if (!userinfo) {
+    //   await self.refreshUserInfo();
+    // }
+    // await self._afterLaunch();
+    // wx.hideLoading();
   }
   async _afterLaunch() {
     console.log("after launch");
@@ -211,7 +211,7 @@ export default class extends wepy.app {
         await self.refreshToken();
       }
     } else {
-      await self.login();
+      //await self.login();
     }
   }
 
@@ -231,7 +231,6 @@ export default class extends wepy.app {
     });
     self.globalData.token = res.data.token;
     self.globalData.expireTime = res.data.expireTime;
-    //self.globalData.userInfo=res.userInfo;
     wx.setStorageSync("user:token", self.globalData.token);
     wx.setStorageSync("user:expireTime", self.globalData.expireTime);
   }
@@ -244,8 +243,9 @@ export default class extends wepy.app {
   }
   async tokenIsExpired() {
     let self = this;
-    let result = await self.globalData.get(`${api.auth.currentTime.url}`);
-    let now = parseFloat(result.currenttime);
+    let result = await self.globalData.get(`${apiM.auth.currentTime.url}`);
+    //let now = parseFloat(result.currenttime);
+    let now = parseFloat(result.nowTime);
     let eptime = parseFloat(
       self.globalData.expireTime || wx.getStorageSync("user:expireTime")
     );
@@ -294,7 +294,7 @@ export default class extends wepy.app {
 
   //token 过期，刷新 token
   async refreshToken() {
-    let newToken = await this.globalData.get(`${api.auth.refreshToken.url}`);
+    let newToken = await this.globalData.get(`${apiM.auth.refreshToken.url}`);
     this.globalData.token = newToken.token;
     this.globalData.expireTime = newToken.expireTime;
     wx.setStorageSync("user:token", this.globalData.token);
@@ -306,7 +306,7 @@ export default class extends wepy.app {
     let self = this;
     let res2;
 
-    res2 = await this.globalData.get(`${api.auth.userDetail.url}`);
+    res2 = await this.globalData.get(`${apiM.auth.userDetail.url}`);
     let obj = res2;
     let userDetail = {};
     if (obj) {
@@ -333,7 +333,7 @@ export default class extends wepy.app {
   onHide() {
     // console.log("this is app on hide");
   }
-  //手风琴
+  //底部导航
   tabBarClickHandle(id,that){
     let tbList = this.globalData.tabBar.list;
     tbList.forEach((item,index) => {
@@ -355,6 +355,7 @@ export default class extends wepy.app {
     bindUser: this.bindUser,
     refreshUserInfo: this.refreshUserInfo.bind(this),
     userInfo: null,
+    playerInfo:null,
     expireTime: null,
     token: null,
     scene: null,
@@ -391,7 +392,7 @@ export default class extends wepy.app {
         }
       ]
     },
-    loginState:0   //登录状态
+    //showLogin:true,
   };
 }
 </script>

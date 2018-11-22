@@ -116,12 +116,17 @@ page{
     background-size:100% 100%;
 }
 .listCon{
-    padding:40rpx 40rpx;
+    padding:0 40rpx;
     background: #171616;
     margin:5rpx 0;
     font-size:26rpx;
-    height:300rpx;
-    overflow: auto;
+    height: 0;
+    transition: height  0.3s;
+}
+.scrollView{
+    padding:40rpx 0;
+    height: 0;
+    transition: height  0.3s;
 }
 .btn-suspend{
     width:100rpx;
@@ -154,12 +159,14 @@ page{
 }
 .info-item{
     display:none;
-    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/infobg.png) no-repeat center top;
-    background-size:100% 100%;
     width:702rpx;
     margin:0 auto;
     font-size:26rpx;
     color:#ffffff;
+}
+.rewardTable,.info-box{
+    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/infobg.png) no-repeat center top;
+    background-size:100% 100%;
 }
 .show{
     display: block;
@@ -185,22 +192,26 @@ page{
     margin-left: 8rpx;
     border:1px solid #595959;
     padding:15rpx 15rpx;
+    height: 36rpx;
     font-size:26rpx;
     color:#c6c6c6;
     width:380rpx;
 }
 .rewardTable{
-    width:90%;
+    width:98%;
     height: 510rpx;
     margin:0 auto;
+    color:#b1b1b1;
 }
 .tableTit{
     margin-bottom: 10rpx;
 }
 .tr{
-    width:100%;
+    width:95%;
+    margin:0 auto;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 .th,.td{
     text-align: center;
@@ -209,33 +220,37 @@ page{
     font-size: 28rpx;
     color:#ffbb2a;
     padding:20rpx 0 10rpx;
-    border-bottom:1px solid #fff;
+    border-bottom:1px solid #3e3b36;
 }
 .td{
-    padding:15rpx 0;
+    padding:10rpx 0;
 }
-.th1,.td1,.th3,.td3{
-    width:30%;
+.th3,.td3{
+    width:20%;
 }
-.th2,.td2{
+.th1,.td1,.th2,.td2{
     width:40%;
 }
-.page{
+.page,.dialogBtn_box{
     text-align: center;
     font-size:24rpx;
     color:#ccc;
+    margin-top: 20rpx;
 }
-.page text,.page button{
+.page text,.page button,.dialogBtn_box button{
     display: inline-block;
     vertical-align: middle;
-    margin:0 10rpx;
+    margin:0 15rpx;
 }
-.page .page-btn{
+.page .page-btn,.dialogBtn_box .dialog_btn{
     background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/jlbg1.png) repeat-x center top;
-    background-size:10rpx 40rpx;
-    line-height: 40rpx;
+    background-size:13rpx 50rpx;
+    line-height: 50rpx;
     color:#352000;
     font-size:22rpx;
+}
+.dialogBtn_box .dialog_btn{
+    padding:0 40rpx;
 }
 .modal-mask {
     width: 100%;
@@ -265,6 +280,9 @@ page{
 .clearfloat:after {visibility:hidden;display:block;font-size:0;content:"";clear:both;height:0;}
 .userInfo-container{
   overflow: hidden;
+}
+.login-item{
+    width:100%;
 }
 .login-item,.login-item label,.login-item input{
     float:left;
@@ -347,7 +365,7 @@ page{
     color:#ee0a3b;
     width:100%;
 }
-.btn-login{
+.btn-login,.btn-primary{
     width:236rpx;
     height: 76rpx;
     font-size: 30rpx;
@@ -384,7 +402,7 @@ page{
     margin-bottom: 10rpx;
 }
 .userInfo-container .login-item label{
-    width: 150rpx;
+    width: 180rpx;
 }
 .userInfo-container .login-item text{
     line-height: 60rpx;
@@ -393,3 +411,10 @@ page{
     top:auto;
     bottom:61rpx;
 }
+.picker{margin-left:180rpx;color:#c6c6c6;border:1px solid #595959;height: 60rpx;width:360rpx;line-height:60rpx;padding:0 10rpx;background: #1c1c1c;}
+//隐藏scroll-view默认滚动条
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    color: transparent;
+  }

@@ -5,13 +5,6 @@
               <image src='../../images/ico.png' />
               <text>{{item.text}}</text>
           </view>
-
-          <!-- <navigator url="{{item.pagePath}}" open-type="redirect" hover-class="none" @tap="jump">
-              <view class="nav_item {{ item.selected  ? 'nav_itemActive' : ''}}" data-index="{{index}}">
-                  <image src='../../images/ico.png' />
-                  <text>{{item.text}}</text>
-              </view>
-            </navigator> -->
         </block>
     </view> 
 </template>
@@ -23,6 +16,10 @@
         tabBar : {
           type:Object,
           default:{}
+        },
+        modalShow :{
+            type:Boolean,
+            value:false
         }
       }
       data = {
@@ -32,18 +29,13 @@
         
       }
       async onLoad(){
-        //console.log(this.$parent.$parent.globalData.loginState)
+        
       }
       methods = {
         jump(e){
+          let that=this;
           let url=e.currentTarget.dataset.url;
-          wx.redirectTo({ url: url });
-          // console.log(e)
-          // if(this.loginState == 0){
-          //   return false
-          // }else{
-          //   wx.redirectTo({ url: url });
-          // }
+          this.$emit('jumpFn',url); 
         }
       }
 }

@@ -1,10 +1,10 @@
-const appid = 'wx51c8d8bbc15b28e2'
+const appid = 'wx3bc2053963959982'
 const env = 'production'
 const env1 = 'production1'
 const constant = {
     fileServer: "http://card.kong.net",
     production: "https://hifun.kongzhong.com",
-    production1: "https://hifunservice.kongzhong.com",
+    production1: "https://wxpwot.kongzhong.com",
     development: "https://card.kong.net"
 }
 //process.env.TZ = 'Asia/Shanghai';
@@ -54,6 +54,22 @@ let urls = {
     }
 }
 
+let urlsM={
+    auth:{
+        refreshToken: {
+            method: 'GET',
+            url: '/hdarmyweb/token/tokenInfo?op=refreshToken'
+        },
+        userDetail: {
+            method: 'GET',
+            url: '/hdarmyweb/token/tokenInfo?op=getUserInfo'
+        },
+        currentTime: {
+            method: 'GET',
+            url: '/hdarmyweb/tokenLogin?op=getNowTime'
+        }
+    }
+}
 let disposeUrl = function (obj, prefix) {
     Object.keys(obj).forEach(function (v) {
         let subV = obj[v];
@@ -71,5 +87,6 @@ module.exports = {
     server: constant[env],
     server1: constant[env1],
     fileServer: constant['fileServer'],
-    api: disposeUrl(urls, constant[env])
+    api: disposeUrl(urls, constant[env]),
+    apiM: disposeUrl(urlsM, constant[env1])
 }

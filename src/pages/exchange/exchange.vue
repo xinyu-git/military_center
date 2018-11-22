@@ -5,19 +5,36 @@
             <swiper></swiper>
             <view class="pageBox">
                 <view class="exchangeBox">
-                    <view class="userCount">个人军功：0</view>
+                    <view class="userCount">个人军功：{{nowCount}}</view>
                     <block  wx:for="{{exchangeData}}" wx:key="index">
-                        <view class="exTitle">{{item.rewardType}}</view>
-                        <view class="exchangeList">
-                            <block wx:for="{{exchangeData[index].exchangeList}}" wx:key="index">
+                        <view class="exTitle">{{item.rewardTypeName}}</view>
+                        <!-- item.rewardType：1 实物奖励 item.rewardType：0游戏内奖励 -->
+                        <view class="exchangeList" wx:if="{{item.rewardType==1}}">
+                            <block wx:for="{{item.exchangeList}}" wx:for-item="cell" wx:key="cellindex">
                                 <view class="exchangeItem">
                                     <view class="rewardBox">
-                                        <image src="{{item.src}}" />
+                                        <image src="{{cell.src}}" />
                                         <view class="rewardName">
-                                            <text>{{item.name}}</text>
+                                            <text>{{cell.name}}</text>
+                                        </view>
+                                        <view class="stock">
+                                            <text>{{cell.stock}}</text>
                                         </view>
                                     </view>
-                                    <button class="btn-exchange">{{item.number}}</button>
+                                    <button class="btn-exchange" @tap="exchange" data-type="{{item.rewardType}}" data-name="{{cell.name}}" data-prizesId="{{cell.prizesId}}" >{{cell.number}}</button>
+                                </view>
+                            </block>
+                        </view>
+                        <view class="exchangeList" wx:elif="{{item.rewardType==0}}">
+                            <block wx:for="{{item.exchangeList}}" wx:for-item="cell" wx:key="cellindex">
+                                <view class="exchangeItem">
+                                    <view class="rewardBox">
+                                        <image src="{{cell.src}}" />
+                                        <view class="rewardName">
+                                            <text>{{cell.name}}</text>
+                                        </view>
+                                    </view>
+                                    <button class="btn-exchange" @tap="exchange" data-type="{{item.rewardType}}" data-name="{{cell.name}}" data-prizesId="{{cell.prizesId}}">{{cell.number}}</button>
                                 </view>
                             </block>
                         </view>
@@ -25,11 +42,11 @@
                 </view>
             </view>
         </view>
-        <!-- 登录弹窗 -->
-        <view class="modal-content" style="display:none;">
+        <!-- 兑换弹窗 -->
+        <view class="modal-content" wx:if='{{modalShow}}'>
             <view class="modal-mask"></view>
             <view class="modal-dialog">
-                <view class="modal-btn"><button class="btn-close" @tap="chooseAddress"></button></view>
+                <view class="modal-btn"><button class="btn-close" @tap="closeUserInfo"></button></view>
                 <view class="userInfo_box">
                     <view class="warm-tips">
                         <text>温馨提示</text>
@@ -40,67 +57,48 @@
                     <view class="userInfo-container">
                         <view class="login-item">
                             <label>兑换物品：</label>
-                            <text>额恩恩</text>
+                            <text>{{exchangeInfo.rewardName}}</text>
                         </view>
                         <view class="login-item">
                             <label>联系人：</label>
-                            <input type="text" />
+                            <input type="text"  @input="bindInput" data-name="user"/>
                         </view>
                         <view class="login-item">
                             <label>联系方式：</label>
-                            <input  type="text" />
+                            <input  type="number" maxlength="11" @input="bindInput" data-name="phone" />
                         </view>
                         <view class="login-item">
                             <label>收货地址</label>
                         </view>
-                        <view class="login-item userInfo-item">
-                            <label>省/市：</label>
-                            <view class="select_box">
-                                <view class="select" @tap="selectTap">
-                                    <text class="select_text"> ee </text>
-                                    <image class='select_img' src='../../images/sel.jpg' />  
+                        <view class="login-item">
+                            <label>请选择地区：</label>
+                            <picker mode="region" @change="bindRegionChange" value="{{region}}" custom-item="{{customItem}}">
+                                <view class="picker">
+                                  {{region[0]}} - {{region[1]}} - {{region[2]}}
                                 </view>
-                                <view class="option_box" >
-                                    <text class="option" >eeeeeeee</text>
-                                    <text class="option" >eeeeeeee1</text>
-                                </view>
-                            </view>
-                        </view>
-                        <view class="login-item userInfo-item">
-                            <label>区/市：</label>
-                            <view class="select_box">
-                                <view class="select" @tap="selectTap">
-                                    <text class="select_text"> ee </text>
-                                    <image class='select_img' src='../../images/sel.jpg' />  
-                                </view>
-                                <view class="option_box" >
-                                    <text class="option" >eeeeeeee</text>
-                                    <text class="option" >eeeeeeee1</text>
-                                </view>
-                            </view>
-                        </view>
-                        <view class="login-item userInfo-item">
-                            <label>区/县：</label>
-                            <view class="select_box">
-                                <view class="select" @tap="selectTap">
-                                    <text class="select_text"> ee </text>
-                                    <image class='select_img' src='../../images/sel.jpg' />  
-                                </view>
-                                <view class="option_box" >
-                                    <text class="option" >eeeeeeee</text>
-                                </view>
-                            </view>
+                            </picker>
                         </view>
                         <view class="login-item">
-                            <label>详细地址ee：</label>
-                            <input  type="text" />
+                            <label>详细地址：</label>
+                            <input  type="text"  @input="bindInput" data-name="address" />
                         </view>
+                        <view class="login-item errorTs">
+                            <text>{{errorTs}}</text>
+                        </view>
+                    </view>
+                    <view class="dialogBtn_box">
+                        <button class="dialog_btn" @tap="exchangeInkIndPrizes" disabled="{{disabled}}">确定</button>
+                        <button class="dialog_btn" @tap="closeUserInfo">取消</button>
                     </view>
                 </view>
             </view>
         </view>
+        <!-- 提示文本弹窗  showBtn显示按钮 btnNum按钮的数量 btnNum:1——确定  btnNum:2——确定/取消 disabled——确定按钮的点击状态 -->
+        <modal :modalShow.sync="showModal" :showBtn.sync="showBtn" :btnNum.sync="btnNum" :disabled.sync="disabled" :modalMsg.sync="modalMsg" @hideFn.user="close" @confirmFn.user="confirm"></modal>
         <!-- 底部导航 -->
-        <tabBar :tabBar.sync="tabBarData"></tabBar>
+        <tabBar :tabBar.sync="tabBarData" @jumpFn.user="jump"></tabBar>
+        <!-- 登录弹窗  -->
+        <register :modalShow.sync="showLogin"  @hideFn.user="close"></register>
     </view>
 </template>
 <script>
@@ -109,113 +107,277 @@
     import auth from "../base/auth";
     import Swiper from "../../components/swiper";
     import tabBar from "../../components/tabBar";
-    export default class Exchange extends auth {
+    import Modal from "../../components/modal";
+    import Register from "../../components/register";
+    import exchangeData from "../../util/exchange";
+    export default class Exchange extends wepy.page {
         config = {
             navigationBarTitleText: "军功中心"
         };
         components = {
             swiper: Swiper,
-            tabBar: tabBar
+            tabBar: tabBar,
+            modal:Modal,
+            register:Register
         };
         async onShow(){
-            
+            let that = this;
         };
         //页面的生命周期函数 
         async onLoad() {
             let that=this;
+            //底部导航
             that.tabBarData = that.$parent.tabBarClickHandle(2, this);
+            //个人军功
+            that.getMilitary();
+            //获取奖励库存信息
+            that.getPrizesStock();
             that.$apply();
         };
         //可用于页面模板绑定的数据
         data = {
             tabBarData:{},
-            exchangeData:[
-                {
-                    rewardType:'军武良品',
-                    exchangeList:[
-                        {
-                            src:'../../images/r1.png',
-                            name:'品坦克世界1:72 百运模型',
-                            number:'15888军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'坦克世界1:72 百运模型',
-                            number:'15588军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'哈罗恩棉油打火机',
-                            number:'15888军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'C系定制中坦59式手表',
-                            number:'15848军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'坦克世界1:72 百运模型',
-                            number:'15888军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'哈罗恩棉油打火机',
-                            number:'15488军功'
-                        }
-                    ]
-                },
-                {
-                    rewardType:'永久坦克',
-                    exchangeList:[
-                        {
-                            src:'../../images/r1.png',
-                            name:'永坦克世界1:72 百运模型',
-                            number:'15军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'坦克世界1:72 百运模型',
-                            number:'15588军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'哈罗恩棉油打火机',
-                            number:'15888军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'C系定制中坦59式手表',
-                            number:'15848军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'坦克世界1:72 百运模型',
-                            number:'15888军功'
-                        },
-                        {
-                            src:'../../images/r1.png',
-                            name:'哈罗恩棉油打火机',
-                            number:'1688军功'
-                        }
-                    ]
-                }
-            ],
+            showLogin:false,  //登录弹窗状态
+            showModal:false, //提示文本弹状态
+            showBtn:true,   //文本弹窗中的按钮
+            modalMsg:'',      //提示文本内容
+            btnNum:1,     //提示文本里按钮的数量
+            exchangeData:exchangeData.exchangeData, //初始的奖品信息
+            region: ['省/市', '区/市', '区/县'],
+            customItem: '请选择', //可为每一列的顶部添加一个自定义的项  例如：全部
+            modalShow:false,  //兑换弹窗
+            exchangeInfo:{
+                rewardName:'',
+                user:'',
+                phone:'',
+                province:'省/市',
+                city:'区/市',
+                area:'区/县',
+                address:''               
+            },
+            errorTs:'',  //实物兑换弹窗错误提示
+            prizesId:'',
+            nowCount:'',  //个人军功
+            disabled:false, //按钮可点击状态
         };
         //事件处理函数(集中保存在methods对象中)
         methods = {
-            chooseAddress(){
-                wx.chooseAddress({
-                    success:function(res){
-                        console.log(res)
+            //picker --省-市-区
+            bindRegionChange: function (e) {
+                let that = this;
+                console.log('picker发送选择改变，携带值为', e.detail.value)
+                that.region = e.detail.value;
+                that.exchangeInfo.province=that.region[0];
+                that.exchangeInfo.city=that.region[1];
+                that.exchangeInfo.area=that.region[2];
+            },
+            //点击底部导航判断
+            async jump(url){
+                let that=this;
+                //let token_is_expired = await that.$parent.tokenIsExpired(); //token是否过期  过期-true  !hasToken || ( hasToken && token_is_expired
+                let hasToken =  that.$parent.hasToken();//是否存在token 
+                //先判断用户是否登陆 
+                if( !hasToken ){
+                    that.showLogin=true;
+                    that.$apply();
+                }else{
+                    wx.redirectTo({ url: url });
+                }
+            },
+            //关闭实物地址弹窗
+            closeUserInfo(){
+                let that = this;
+                that.modalShow = false;
+            },
+            //关闭弹窗--组件
+            close(e){
+                this[e]=false;
+                this.$apply();
+            },
+            //兑换奖励弹窗 实物奖励和游戏内奖励兑换分别弹窗
+            async exchange(e){
+                let that = this;
+                let rewardType = e.currentTarget.dataset.type;  //rewardType=1为实物  rewardType=0为游戏内奖品
+                let rewardName = e.currentTarget.dataset.name;
+                let prizesId = e.currentTarget.dataset.prizesid;  //奖品id
+                that.prizesId=prizesId;  //兑换奖品的id
+                //return false;
+                if(rewardType==0){
+                    //游戏内奖品
+                    that.showModal=true; //显示提示文本弹窗
+                    that.btnNum=2;  //提示文本两个按钮
+                    that.modalMsg='确认兑换 '+rewardName+'?';
+                }else if(rewardType==1){
+                    //实物奖品
+                    //获取单个奖品的库存  库存小于等于0时提示
+                    let resultUnit = await that.$parent.globalData.get(
+                        `${api.server1}/hdarmyweb/token/exchange?op=valInKind`,
+                            {prizesId:prizesId }
+                    );            
+                    if(resultUnit.prizesCount<=0){
+                        that.showModal = true;  //提示文本弹窗
+                        that.modalMsg = '商品库存不足请选择其他礼品';
+                        that.btnNum = 1;            //提示文本弹窗按钮数量
+                        that.$apply();
+                        return;
                     }
-                })
-            }
-        };
-        async onShow(){
+                    //如果库存足够，弹出实物兑换地址弹窗
+                    that.modalShow = true;
+                    that.region=['省/市', '区/市', '区/县'];  //每次兑换前初始化地区
+                    //每次兑换前置空前一次输入的内容  特别注意兑换的奖品名称
+                    that.exchangeInfo = {
+                        rewardName:rewardName,
+                        user:'',
+                        phone:'',
+                        province:'省/市',
+                        city:'区/市',
+                        area:'区/县',
+                        address:'' 
+                    };   
+                    that.errorTs='';
+                    that.$apply();
+                }
+                //that.$apply();
+            },
+            //地址弹窗输入信息
+            bindInput(e) {
+                let that = this;
+                let key = e.currentTarget.dataset.name;
+                that.exchangeInfo[key] = e.detail.value;
+            },
+            //文本弹窗里的确定按钮执行的方法
+            confirm(e){
+                let that = this;
+                let btnNum = that.btnNum;
+                //通过按钮数量判断  按钮数量为一个确定按钮时，纯文本提示，关闭弹窗
+                //按钮数量为2时，则为兑换游戏内奖品的二次弹窗。
+                if(btnNum==1){
+                    that.showModal=false;
+                }else if(btnNum==2){
+                    that.exchangePrizes();
+                }
+            },
+            //兑换实物弹窗里的确定方法
+            async exchangeInkIndPrizes(e){
+                let that = this;
+                let exchangeInfo = that.exchangeInfo;
+                let prizesId = that.prizesId; //奖品id
+                if(that.disabled) return;
+                that.disabled=true; //按钮设置为不可点击
+                if(exchangeInfo.user == ''){
+                    that.errorTs = '请填写联系人';
+                    return;
+                }
+                if(exchangeInfo.phone == ''){
+                    that.errorTs = '请填写联系方式';
+                    return;
+                }
+                if(exchangeInfo.province == '省/市' || exchangeInfo.province == '请选择'){
+                    that.errorTs = '请选择省市';
+                    return;
+                }
+                if(exchangeInfo.city == '请区市' || exchangeInfo.city == '请选择'){
+                    that.errorTs = '请选择区市';
+                    return;
+                }
+                if(exchangeInfo.area == '请区县' || exchangeInfo.area == '请选择'){
+                    that.errorTs = '请选择区县';
+                    return;
+                }
+                if(exchangeInfo.address == '' || exchangeInfo.address == null){
+                    that.errorTs = '请填写具体收货地址';
+                    return;
+                }
+                
+                let exchangeInfoData={
+                    prizesId:prizesId,
+                    c1:exchangeInfo.province,
+                    c2:exchangeInfo.city,
+                    c3:exchangeInfo.area,
+                    address:exchangeInfo.address,
+                    phone:exchangeInfo.phone,
+                    lname:exchangeInfo.user
+                }
+                console.log(exchangeInfoData);
+                
+                //return false;
+                let result = await that.$parent.globalData.get(
+                    `${api.server1}/hdarmyweb/token/exchange?op=exchangeInKind`,
+                    exchangeInfoData
+                );
+                
+                that.modalShow = false; //关闭地址弹窗
+                that.showModal = true;  //打开文本提示弹窗
+                that.modalMsg = result.msg; //提示文本内容
+                that.disabled=false;
+                that.getMilitary();   //刷新军功值
+                console.log(result)
+                that.$apply();               
+            },
             
         };
-        
+        // 获取实物奖品库存
+        async getPrizesStock(){
+            let that = this;
+            let exchangeData = that.exchangeData; //初始奖励数据
+            //let prizesDataTemp = [];
+            //所有实物奖品的列表
+            // let result1 = await that.$parent.globalData.get(
+            //     `${api.server1}/hdarmyweb/token/exchange?op=gei`
+            // );
+            //prizesDataTemp = result.list;
+            for(let i=0;i<exchangeData.length;i++){
+                //实物奖品
+                if(exchangeData[i].rewardType==1){
+                    for(let j=0;j<exchangeData[i].exchangeList.length;j++){
+                        //对数据 增加库存内容
+                        //调用 库存接口 查询库存数据
+                        let prizesId=exchangeData[i].exchangeList[j].prizesId;
+                        let result = await that.$parent.globalData.get(
+                            `${api.server1}/hdarmyweb/token/exchange?op=valInKind`,
+                            {prizesId:prizesId }
+                        );
+                        exchangeData[i].exchangeList[j].stock='库存'+result.prizesCount;
+                        that.$apply();
+                        // for(let k=0;k<prizesDataTemp.length;k++){
+                        //     if(exchangeData[i].exchangeList[j].prizesId==prizesDataTemp[k].prizesWebId){
+                        //         exchangeData[i].exchangeList[j].stock='库存'+prizesDataTemp[k].nowCount
+                        //     }
+                        // }
+                    }
+                }
+            }
+            //that.$apply();
+        };
+        //个人军功
+        async getMilitary(){
+            let that = this;
+            let result = await that.$parent.globalData.get(
+                `${api.server1}/hdarmyweb/token/user?op=getArmyFeatsInfo`
+            );
+            that.nowCount = result.nowCount;
+            //that.military.sumCount = result.sumCount;
+            that.$apply();
+        };
+        //兑换游戏内弹窗里的确定方法
+        async exchangePrizes(){
+            let that = this;
+            let prizesId = that.prizesId;
+            if(that.disabled) return;
+            that.disabled=true; //按钮设置为不可点击
+            let result = await that.$parent.globalData.get(
+                `${api.server1}/hdarmyweb/token/exchange?op=exchangePrizes`,
+                {prizesId:prizesId}
+            );
+            that.showModal = true;  //打开文本提示弹窗
+            that.modalMsg = result.msg; //提示文本内容
+            that.btnNum = 1;            //提示文本弹窗按钮数量
+            that.disabled=false;
+            that.getMilitary();   //刷新军功值
+            console.log(result);
+            that.$apply();
+            
+        };
     }
 </script>
 <style >
@@ -244,11 +406,12 @@
 }
 .exchangeItem{
     display: inline-block;
-    margin:10rpx 10rpx;
+    margin:10rpx 15rpx;
+    vertical-align: top;
 }
 .rewardBox{
     width:220rpx;
-    height: 220rpx;
+    height: 246rpx;
     margin-bottom:10rpx;
     background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/jlbg.png) no-repeat center top;
     background-size:100% 100%;
@@ -257,8 +420,7 @@
 .rewardBox image{
     display: block;
     width:100%;
-    height: 125rpx;
-    padding-top:15rpx;
+    height: 186rpx;
 }
 .rewardName{
     width:100%;
@@ -271,18 +433,28 @@
     left:0;
     bottom:0;
 }
-.rewardBox text{
+.rewardName text{
     font-size:24rpx;
     color:#fff4f4;
     padding:0 10rpx;
     line-height: 30rpx;
+    text-align: center;
+    width:100%;
 }
 .btn-exchange{
     width:200rpx;
     font-size:22rpx;
     color:#352000;
     background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/jlbg1.png) repeat-x center top;
-    background-size:10rpx 40rpx;
+    background-size:auto 100%;
     line-height: 40rpx;
+    padding:0 10rpx;
 }
+.stock{
+    position:absolute;left: 10rpx;top: 2rpx;
+}
+.stock text{
+    color:#352000;
+}
+.errorTs{text-align: center;color: red;}
 </style>
