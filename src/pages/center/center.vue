@@ -15,7 +15,7 @@
                         <view class="info-box">
                             <view class="info-line">
                                 <label>昵称：</label>
-                                <text>{{playerDetail.loginName}}</text>
+                                <text>{{playerDetail.nickName}}</text>
                             </view>
                             <view class="info-line">
                                 <label>大区：</label>
@@ -63,7 +63,7 @@
             </view>
         </view>
         <!-- 底部导航 -->
-        <tabBar :tabBar.sync="tabBarData" @jumpFn.user="jump"></tabBar>
+        <tabBar :activeIndex.sync="activeIndex" @jumpFn.user="jump"></tabBar>
         <!-- 登录弹窗  -->
         <register :modalShow.sync="showLogin"  @hideFn.user="close"></register>
     </view>
@@ -77,7 +77,7 @@
     import Register from "../../components/register";
     export default class Center extends wepy.page {
         config = {
-            navigationBarTitleText: "军功中心"
+            navigationBarTitleText: "个人中心"
         };
         components = {
             swiper: Swiper,
@@ -86,7 +86,7 @@
         };
         //可用于页面模板绑定的数据
         data = {
-            tabBarData:{}, //底部导航
+            activeIndex:1,//底部导航当前索引值
             currentTab:0,   //个人信息/领奖记录----显示隐藏
             prizesList:[],  //奖励列表
             prizesListPage:[], //分页数据
@@ -138,7 +138,7 @@
                 },
             ],
             showLogin:false,  //登录弹窗显示隐藏变量
-            playerDetail:{loginName:'',region:''},  //玩家详情
+            playerDetail:{},  //玩家详情
             military:{nowCount:'',sumCount:''},     //军功详情
             pageNum:'',     //领奖页码
             pageIndex:1,//当前页码
@@ -152,11 +152,11 @@
         //页面的生命周期函数 
         async onLoad() {
             let that=this;
-            //底部导航
-            that.tabBarData = that.$parent.tabBarClickHandle(1, this);
             //玩家信息
-            that.playerDetail=wx.getStorageSync("player:detail");
+            that.getPlayInfo();
+            //获取军功
             that.getMilitary();
+            //获取领奖记录
             that.getRecord();
             //console.log(that.playerDetail)
             that.$apply();
@@ -177,14 +177,12 @@
             //点击底部导航判断
             async jump(url){
                 let that=this;
-                //let token_is_expired = await that.$parent.tokenIsExpired(); //token是否过期  过期-true  !hasToken || ( hasToken && token_is_expired
-                let hasToken =  that.$parent.hasToken();//是否存在token 
-                //先判断用户是否登陆 1-没有token 2-有token同时token过期
+                let hasToken =  that.$parent.hasToken();//是否存在token                
                 if( !hasToken ){
                     that.showLogin=true;
                     that.$apply();
                 }else{
-                    wx.redirectTo({ url: url });
+                    wx.switchTab({ url: url });
                 }
             },
             //登出
@@ -192,9 +190,8 @@
                 let that = this;
                 wx.setStorageSync("user:token", '');
                 wx.setStorageSync("user:expireTime", '');
-                wx.setStorageSync("player:detail",{});
-                //that.playerDetail=wx.getStorageSync("player:detail");
-                wx.redirectTo({ url: '../home/index' });
+                that.$parent.globalData.token=null;
+                wx.reLaunch({ url: '/pages/home/index' });
                 that.$apply();
             },
             //上一页
@@ -243,7 +240,7 @@
         page(pageIndex){
             let that = this;
             let prizesList = that.prizesList;
-            let totalPage = Math.ceil(prizesList.length / that.pageSize);
+            let totalPage = parseInt(prizesList.length / that.pageSize)+1;
             let pageSize = that.pageSize;
             that.totalPage = totalPage;  //总页数
             that.prizesListPage=[]; //置空
@@ -259,7 +256,23 @@
                 }
             }
             this.$apply();
-        }
+        };
+        //获取玩家信息
+        async getPlayInfo(){
+            let that = this;
+            let playerTemp={};
+            let result = await that.$parent.globalData.get(
+                `${api.server1}/hdarmyweb/token/tokenInfo?op=getUserInfo`
+            );
+            playerTemp.nickName=result.nickName;
+            if(result.zoneId=='1500100'){
+                playerTemp.region='联通北方区'
+            }else if(result.zoneId=='1500200'){
+                playerTemp.region='电信南方区'
+            }
+            that.playerDetail=playerTemp;
+            that.$apply();
+        };
     }
 </script>
 <style >

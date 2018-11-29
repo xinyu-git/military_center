@@ -3,7 +3,7 @@ const env = 'production'
 const env1 = 'production1'
 const constant = {
     fileServer: "http://card.kong.net",
-    production: "https://hifun.kongzhong.com",
+    production: "https://vi.kongzhong.com",  //请求的线上数据
     production1: "https://wxpwot.kongzhong.com",
     development: "https://card.kong.net"
 }

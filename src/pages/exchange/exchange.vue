@@ -61,11 +61,11 @@
                         </view>
                         <view class="login-item">
                             <label>联系人：</label>
-                            <input type="text"  @input="bindInput" data-name="user"/>
+                            <input type="text"  @input="bindInput" data-name="user" cursor-spacing="30"/>
                         </view>
                         <view class="login-item">
                             <label>联系方式：</label>
-                            <input  type="number" maxlength="11" @input="bindInput" data-name="phone" />
+                            <input  type="number" maxlength="11" @input="bindInput" data-name="phone" cursor-spacing="20" />
                         </view>
                         <view class="login-item">
                             <label>收货地址</label>
@@ -80,7 +80,7 @@
                         </view>
                         <view class="login-item">
                             <label>详细地址：</label>
-                            <input  type="text"  @input="bindInput" data-name="address" />
+                            <input  type="text"  @input="bindInput" data-name="address" cursor-spacing="30"/>
                         </view>
                         <view class="login-item errorTs">
                             <text>{{errorTs}}</text>
@@ -96,7 +96,7 @@
         <!-- 提示文本弹窗  showBtn显示按钮 btnNum按钮的数量 btnNum:1——确定  btnNum:2——确定/取消 disabled——确定按钮的点击状态 -->
         <modal :modalShow.sync="showModal" :showBtn.sync="showBtn" :btnNum.sync="btnNum" :disabled.sync="disabled" :modalMsg.sync="modalMsg" @hideFn.user="close" @confirmFn.user="confirm"></modal>
         <!-- 底部导航 -->
-        <tabBar :tabBar.sync="tabBarData" @jumpFn.user="jump"></tabBar>
+        <tabBar  :activeIndex.sync="activeIndex" @jumpFn.user="jump"></tabBar>
         <!-- 登录弹窗  -->
         <register :modalShow.sync="showLogin"  @hideFn.user="close"></register>
     </view>
@@ -109,10 +109,10 @@
     import tabBar from "../../components/tabBar";
     import Modal from "../../components/modal";
     import Register from "../../components/register";
-    import exchangeData from "../../util/exchange";
+    //import exchangeData from "../../util/exchange";
     export default class Exchange extends wepy.page {
         config = {
-            navigationBarTitleText: "军功中心"
+            navigationBarTitleText: "兑换"
         };
         components = {
             swiper: Swiper,
@@ -127,22 +127,26 @@
         async onLoad() {
             let that=this;
             //底部导航
-            that.tabBarData = that.$parent.tabBarClickHandle(2, this);
+            //that.tabBarData = that.$parent.tabBarClickHandle(2, this);
             //个人军功
             that.getMilitary();
+            //获取兑换奖品数据
+            await that.getExchangeData();
             //获取奖励库存信息
             that.getPrizesStock();
             that.$apply();
+           
         };
         //可用于页面模板绑定的数据
         data = {
-            tabBarData:{},
+            activeIndex:2,  //底部导航当前索引值
             showLogin:false,  //登录弹窗状态
             showModal:false, //提示文本弹状态
             showBtn:true,   //文本弹窗中的按钮
             modalMsg:'',      //提示文本内容
             btnNum:1,     //提示文本里按钮的数量
-            exchangeData:exchangeData.exchangeData, //初始的奖品信息
+            //exchangeData:exchangeData.exchangeData, //初始的奖品信息
+            exchangeData:[], //初始的奖品信息
             region: ['省/市', '区/市', '区/县'],
             customItem: '请选择', //可为每一列的顶部添加一个自定义的项  例如：全部
             modalShow:false,  //兑换弹窗
@@ -174,14 +178,13 @@
             //点击底部导航判断
             async jump(url){
                 let that=this;
-                //let token_is_expired = await that.$parent.tokenIsExpired(); //token是否过期  过期-true  !hasToken || ( hasToken && token_is_expired
                 let hasToken =  that.$parent.hasToken();//是否存在token 
                 //先判断用户是否登陆 
                 if( !hasToken ){
                     that.showLogin=true;
                     that.$apply();
                 }else{
-                    wx.redirectTo({ url: url });
+                    wx.switchTab({ url: url });
                 }
             },
             //关闭实物地址弹窗
@@ -262,8 +265,6 @@
                 let that = this;
                 let exchangeInfo = that.exchangeInfo;
                 let prizesId = that.prizesId; //奖品id
-                if(that.disabled) return;
-                that.disabled=true; //按钮设置为不可点击
                 if(exchangeInfo.user == ''){
                     that.errorTs = '请填写联系人';
                     return;
@@ -288,7 +289,8 @@
                     that.errorTs = '请填写具体收货地址';
                     return;
                 }
-                
+                if(that.disabled) return;
+                that.disabled=true; //按钮设置为不可点击
                 let exchangeInfoData={
                     prizesId:prizesId,
                     c1:exchangeInfo.province,
@@ -320,6 +322,7 @@
         async getPrizesStock(){
             let that = this;
             let exchangeData = that.exchangeData; //初始奖励数据
+            console.log(that.exchangeData)
             //let prizesDataTemp = [];
             //所有实物奖品的列表
             // let result1 = await that.$parent.globalData.get(
@@ -347,7 +350,7 @@
                     }
                 }
             }
-            //that.$apply();
+            that.$apply();
         };
         //个人军功
         async getMilitary(){
@@ -378,6 +381,15 @@
             that.$apply();
             
         };
+        //获取兑换奖品的数据
+        async getExchangeData(){
+            let that = this;
+            let result = await that.$parent.globalData.get(
+                `${api.server}/military_minor/json/exchange.json`
+            );
+            that.exchangeData=result;
+            that.$apply();
+        }
     }
 </script>
 <style >
@@ -389,14 +401,14 @@
     line-height: 68rpx;
     text-align: center;
     margin-bottom: 10rpx;
-    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/exV.png) no-repeat center 0;
+    background: url(https://vi.kongzhong.com/military_minor/images/exV.png) no-repeat center 0;
     background-size:auto 100%;
 }
 .exTitle{
     text-align: center;
     line-height: 40rpx;
     color: #e06d30;
-    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/h4.png) no-repeat center 0;
+    background: url(https://vi.kongzhong.com/military_minor/images/h4.png) no-repeat center 0;
     background-size:auto 100%;
     margin-bottom: 10rpx;
 }
@@ -413,7 +425,7 @@
     width:220rpx;
     height: 246rpx;
     margin-bottom:10rpx;
-    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/jlbg.png) no-repeat center top;
+    background: url(https://vi.kongzhong.com/military_minor/images/jlbg.png) no-repeat center top;
     background-size:100% 100%;
     position: relative;
 }
@@ -445,7 +457,7 @@
     width:200rpx;
     font-size:22rpx;
     color:#352000;
-    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/jlbg1.png) repeat-x center top;
+    background: url(https://vi.kongzhong.com/military_minor/images/jlbg1.png) repeat-x center top;
     background-size:auto 100%;
     line-height: 40rpx;
     padding:0 10rpx;

@@ -4,7 +4,7 @@
             <!-- 轮播图 -->
             <swiper></swiper>
             <view class="pageBox">
-                <!-- 手风琴 hidden="{{!item.shows}}" -->
+                <!-- 手风琴 -->
                 <view class="accordion">
                     <block wx:for="{{listContent}}" wx:key="index">
                         <view class="listEvent" >
@@ -27,10 +27,10 @@
                                                     </view>
                                                     <view class="table table-item table-flex" wx:if="{{item.type=='td'}}" wx:key="{{index}}">
                                                         <block wx:for="{{item.tdTheme}}" wx:key="{{index}}" >                 
-                                                            <view class="item {{item.value.length==1 ? 'merge' : ''}}">
+                                                            <view class="item">
                                                                 <block wx:for="{{item.value}}" wx:key="{{index}}" >
-                                                                    <view class="item2" >
-                                                                        <text>{{item.tdName}}</text>
+                                                                    <view class="item2" style="height:{{item.rowspan >1 ?(item.rowspan*60):60}}rpx;">
+                                                                        <text>{{item.tdName}} </text>
                                                                     </view>
                                                                 </block>
                                                             </view>
@@ -50,7 +50,7 @@
         <!-- 悬浮 -->
         <view class="btn-suspend" @tap="getReward"></view>
         <!-- 底部导航 -->
-        <tabBar :tabBar.sync="tabBarData" @jumpFn.user="jump"></tabBar>
+        <tabBar  :activeIndex.sync="activeIndex" @jumpFn.user="jump"></tabBar>
         <!-- 登录弹窗  -->
         <register :modalShow.sync="showLogin"  @hideFn.user="close"></register>
         <!-- 提示文本弹窗  showBtn显示按钮 btnNum按钮的数量 btnNum:1——确定  btnNum:2——确定/取消-->
@@ -62,14 +62,14 @@
 <script>
     import wepy from 'wepy';
     import api from "../../config/api";
-    import auth from "../base/auth";
+    //import auth from "../base/auth";
     import Swiper from "../../components/swiper";
     import tabBar from "../../components/tabBar";
     import Register from "../../components/register";
     import Modal from "../../components/modal";
     import Reward from "../../components/reward";
-    import listContent from "../../util/news";
-    export default class Index extends auth {
+    //import listContent from "../../util/news";
+    export default class Index extends wepy.page {
         config = {
             navigationBarTitleText: "首页"
         };
@@ -81,7 +81,10 @@
             reward:Reward
         };
         async onShow(){
-            
+            //进入页面时需要隐藏掉原有的tabbar
+             wx.hideTabBar({
+                aniamtion: false
+            })
         };
         //页面的生命周期函数 
         async onLoad() {
@@ -91,13 +94,15 @@
             // }
             
             let that=this;
-            that.tabBarData = that.$parent.tabBarClickHandle(0, this);
+            //获取新闻信息
+            that.getListContent();
             that.$apply();
         };
         //可用于页面模板绑定的数据
         data = {
-            tabBarData:{},    //底部导航
-            listContent:listContent.listContent,
+            activeIndex:0, //底部导航当前索引值
+            //listContent:listContent.listContent,
+            listContent:[],
             listCurrIndex:0,
             showLogin:false,  //登录弹窗状态
             showModal:false, //提示文本弹状态
@@ -192,16 +197,15 @@
             //一键领取--奖品列表
             async getReward(){
                 let that = this;
-                let token_is_expired = await that.$parent.tokenIsExpired(); //token是否过期  过期-true 
+                //let token_is_expired = await that.$parent.tokenIsExpired(); //token是否过期  过期-true 
                 let hasToken =  that.$parent.hasToken();//是否存在token 
                 //先判断用户是否登陆
-                if(!hasToken || ( hasToken && token_is_expired)){
+                if(!hasToken){
                     that.showLogin=true;
                 }else{
                     let result = await that.$parent.globalData.get(
                         `${api.server1}/hdarmyweb/token/mission?op=getCanGetUserPrizesList`
                     );
-                    console.log(result)
                     if(result.prizesList.length>0){
                         that.rewardData = result.prizesList;
                         that.showReward = true;
@@ -227,18 +231,24 @@
             //点击底部导航判断
             async jump(url){
                 let that=this;
-                //let token_is_expired = await that.$parent.tokenIsExpired(); //token是否过期  过期-true  !hasToken || ( hasToken && token_is_expired
                 let hasToken =  that.$parent.hasToken();//是否存在token 
-                //先判断用户是否登陆 1-没有token 2-有token同时token过期
                 if( !hasToken ){
                     that.showLogin=true;
                     that.$apply();
                 }else{
-                    wx.redirectTo({ url: url });
+                    wx.switchTab({ url: url });
                 }
             }
         };
-        
+        //获取新闻的数据
+        async getListContent(){
+            let that = this;
+            let result = await that.$parent.globalData.get(
+                `${api.server}/military_minor/json/news.json`
+            );
+            that.listContent=result;
+            that.$apply();
+        }
     }
 </script>
 <style >
@@ -247,13 +257,12 @@
     flex-direction: column;
     margin: 30rpx 0;
     flex: 1;
-    border:1px solid #343434;
+    border:2rpx solid #343434;
     border-right:none;
     border-bottom: none;
 }
 .table {
     color: #b1b1b1;
-    
     text-align: center;
 }
 
@@ -273,11 +282,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border-bottom: 2rpx solid #343434;
 }
 .item,.itemTh {
     flex: 1;
-    border-right:1px solid #343434;
-    border-bottom: 1px solid #343434;
+    border-right:2rpx solid #343434;
 }
 .item2{
     height:60rpx;
@@ -285,10 +294,7 @@
     display:flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid #343434;
+    border-bottom: 2rpx solid #343434;
     overflow: auto;
-}
-.merge .item2{
-    height: 100%;
 }
 </style>

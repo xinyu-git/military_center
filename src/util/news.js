@@ -36,8 +36,8 @@ var listContent=[
                     {value:[{tdName: '11月5日'},{tdName: '11月6日'},{tdName: '11月7日'},{tdName: '11月8日'},{tdName: '11月9日'},{tdName: '11月10日'}]},   
                     {value:[{tdName: '2000金币（50元）'},{tdName: '2000金币（50元）'},{tdName: '2000金币（50元）'},{tdName: '2000金币（50元）'},{tdName: '2000金币（50元）'},{tdName: '2000金币（50元）'}]},   
                     {value:[{tdName: '200万银币'},{tdName: '150万银币+战斗经验加成100%（1小时）*3'},{tdName: '600金币'},{tdName: '100万银币'},{tdName: '500金币'},{tdName: '100万银币'}]},
-                    {value:[{tdName: '666万银币'}]},
-                ]},
+                    {value:[{tdName: '666万银币',rowspan:4},{tdName: '6661万银币',rowspan:2}]}
+                ]}
             ]},
             {color:'#b1b1b1',type:'text',value:'　　活动说明：'},
             {color:'#b1b1b1',type:'text',value:'　　例：'},
@@ -69,7 +69,7 @@ var listContent=[
                 {type:'td',tdTheme:[
                     {value:[{tdName: '购买车位'},{tdName: '扩充兵营'},{tdName: '购买100%乘员'},{tdName: '再训练100%乘员'}]},
                     {value:[{tdName: '200'},{tdName: '200'},{tdName: '100'},{tdName: '100'}]},
-                ]},
+                ]}
             ]}                      
         ]
     },
@@ -101,7 +101,7 @@ var listContent=[
             {color:'#b1b1b1',type:'text',value:'　　①击毁敌方坦克≥1；'}, 
             {color:'#b1b1b1',type:'text',value:'　　②战斗中对敌方坦克造成的伤害≥2000。'},  
             {color:'#b1b1b1',type:'text',value:'　　'},   
-            {color:'#b1b1b1',type:'text',value:'　　具体详情及规则请查看游戏内“任务与活动”，一切以游戏内时间、数据为准！'},                                  
+            {color:'#b1b1b1',type:'text',value:'　　具体详情及规则请查看游戏内“任务与活动”，一切以游戏内时间、数据为准！'}                               
         ]
     },
     {

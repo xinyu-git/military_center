@@ -29,7 +29,7 @@
             </view>
         </view>
         <!-- 底部导航 -->
-        <tabBar :tabBar.sync="tabBarData" @jumpFn.user="jump"></tabBar>
+        <tabBar  :activeIndex.sync="activeIndex" @jumpFn.user="jump"></tabBar>
         <!-- 登录弹窗  -->
         <register :modalShow.sync="showLogin"  @hideFn.user="close"></register>
     </view>
@@ -41,7 +41,7 @@
     import Swiper from "../../components/swiper";
     import tabBar from "../../components/tabBar";
     import Register from "../../components/register";
-    import activityList from "../../util/activity";
+    //import activityList from "../../util/activity";
     export default class Activity extends wepy.page {
         config = {
             navigationBarTitleText: "军功中心"
@@ -57,15 +57,21 @@
         //页面的生命周期函数 
         async onLoad() {
             let that=this;
+            //底部导航
             that.tabBarData = that.$parent.tabBarClickHandle(3, this);
+            //获取活动列表
+            await that.getActivityList();
+            //获取第一页数据
             that.page(1);
             that.$apply();
+           
         };
         //可用于页面模板绑定的数据
         data = {
-            tabBarData:{},
+            activeIndex:3,    //底部导航当前索引值
             showLogin:false,  //登录弹窗状态
-            activityList:activityList.activityList,
+            //activityList:activityList.activityList,
+            activityList:[],
             activityListPage:[],
             pageNum:'',     //领奖页码
             pageIndex:1,//当前页码
@@ -77,9 +83,7 @@
             //点击底部导航判断
             async jump(url){
                 let that=this;
-                //let token_is_expired = await that.$parent.tokenIsExpired(); //token是否过期  过期-true  !hasToken || ( hasToken && token_is_expired
                 let hasToken =  that.$parent.hasToken();//是否存在token 
-                //先判断用户是否登陆 1-没有token 2-有token同时token过期
                 if( !hasToken ){
                     that.showLogin=true;
                     that.$apply();
@@ -116,7 +120,7 @@
         page(pageIndex){
             let that = this;
             let activityList = that.activityList;
-            let totalPage = Math.ceil(activityList.length / that.pageSize);
+            let totalPage = parseInt(prizesList.length / that.pageSize)+1;
             let pageSize = that.pageSize;
             that.totalPage = totalPage;  //总页数
             that.activityListPage=[]; //置空
@@ -132,6 +136,15 @@
                 }
             }
             this.$apply();
+        };
+        //获取活动的数据
+        async getActivityList(){
+            let that = this;
+            let result = await that.$parent.globalData.get(
+                `${api.server}/military_minor/json/activity.json`
+            );
+            that.activityList=result;
+            that.$apply();
         }
     }
 </script>
@@ -140,7 +153,7 @@
     width:622rpx;
     margin:0 auto 30rpx;
     padding:30rpx 40rpx;
-    background: url(https://raw.githubusercontent.com/xinyu-git/military_center/master/src/images/infobg.png) no-repeat center top #1a1919;
+    background: url(https://vi.kongzhong.com/military_minor/images/infobg.png) no-repeat center top #1a1919;
     background-size:100% 510rpx;
 }
 .activityItem{

@@ -15,14 +15,11 @@ const EventBus = require("./util/eventbus");
 export default class extends wepy.app {
   config = {
     pages: [
-      "pages/activity/activity",
       "pages/home/index",
-      "pages/activity/activityCon",
       "pages/exchange/exchange",
       "pages/center/center",
-      "pages/auth/refreToken",
-      "pages/auth/signup",
-      "pages/auth/login"
+      "pages/activity/activity",
+      "pages/activity/activityCon",
     ],
 
     window: {
@@ -38,7 +35,23 @@ export default class extends wepy.app {
       request: 10000,
       downloadFile: 10000
     },
-    debug: false
+    debug: false,
+    tabBar:{  //底部导航--自定义底部导航结合使用
+      list:[
+        {
+          pagePath:'pages/home/index',
+          text: '首页'
+        },
+        {
+          pagePath:'pages/center/center',
+          text:'个人中心'
+        },
+        {
+          pagePath:'pages/exchange/exchange',
+          text: '兑换'
+        }
+      ]
+    }
   };
 
   Prequest(method = "GET") {
@@ -76,7 +89,7 @@ export default class extends wepy.app {
                     wx.removeStorageSync("user:token");
                     wx.removeStorageSync("user:expireTime");
                     //2.重新 onLauch 到首页
-                    wx.reLaunch({ url: "/pages/auth/refreToken" });
+                    wx.reLaunch({ url: "/pages/home/index" });
                   }
                 });
                 wx.hideLoading();
@@ -167,6 +180,10 @@ export default class extends wepy.app {
         */
 
     let self = this;
+    //进入页面时需要隐藏掉原有的tabbar
+    wx.hideTabBar({
+       aniamtion: false
+    })
     let result = wx.getSystemInfoSync(); //取运行环境
     self.globalData.environment = result.environment || "";
     if (result.environment == "wxwork") {
@@ -355,7 +372,6 @@ export default class extends wepy.app {
     bindUser: this.bindUser,
     refreshUserInfo: this.refreshUserInfo.bind(this),
     userInfo: null,
-    playerInfo:null,
     expireTime: null,
     token: null,
     scene: null,
@@ -367,32 +383,8 @@ export default class extends wepy.app {
     io: null,
     socket1: null,
     loginInfo: {},
-    EventBus: EventBus,
-    tabBar:{  //底部导航
-      list:[
-        {
-          pagePath:'../home/index',
-          text: '首页',
-          tabIndex: 0
-        },
-        {
-          pagePath:'../center/center',
-          text:'个人中心',
-          tabIndex: 1
-        },
-        {
-          pagePath:'../exchange/exchange',
-          text: '兑换',
-          tabIndex: 2
-        },
-        {
-          pagePath:'../activity/activity',
-          text: '往期活动',
-          tabIndex: 3
-        }
-      ]
-    },
-    //showLogin:true,
+    EventBus: EventBus
+    
   };
 }
 </script>

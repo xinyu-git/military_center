@@ -77,7 +77,6 @@
 .reward-dialog{padding:30rpx 30rpx}
 .re_table_title{display: flex;}
 .re_table_title .reTh{padding:5rpx 0;flex:1;border-bottom:1px solid #595959; }
-.re_table_con{}
 .re_item{display: flex;padding:10rpx 5rpx;align-items: center;color:#ffebcc;}
 .re_item text{flex:1;line-height: 35rpx;}
 .btnBox{display: flex;}

@@ -97,7 +97,7 @@
             //登录
             async login(){
                 let that=this;
-                let playerDetail={};//存储玩家登录的信息
+                //let playerDetail={};//存储玩家登录的信息
                 if(that.userInfo.loginName==''){
                     that.userInfo.tips="请输入用户名";
                     return;
@@ -114,9 +114,9 @@
                     that.userInfo.password="";
                 }
                 //存储玩家登录的信息
-                playerDetail.loginName=that.userInfo.loginName;
-                playerDetail.zoneId=that.userInfo.zoneId;
-                playerDetail.region=that.userInfo.region;
+                //playerDetail.loginName=that.userInfo.loginName;
+                //playerDetail.zoneId=that.userInfo.zoneId;
+                //playerDetail.region=that.userInfo.region;
                 //请求传的数据
                 let loginData={
                     op:'getTokenInLogin',
@@ -134,8 +134,8 @@
                     //存储玩家信息和token;
                     that.$parent.$parent.globalData.token=result.token;
                     that.$parent.$parent.globalData.expireTime=result.expiryDate;
-                    that.$parent.$parent.globalData.playerInfo=playerDetail;
-                    wx.setStorageSync("player:detail",playerDetail);
+                    //that.$parent.$parent.globalData.playerInfo=playerDetail;
+                    //wx.setStorageSync("player:detail",playerDetail);
                     wx.setStorageSync("user:token", that.$parent.$parent.globalData.token);
                     wx.setStorageSync("user:expireTime", that.$parent.$parent.globalData.expireTime);
                     that.modalShow=false;
